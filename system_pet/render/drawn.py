@@ -135,11 +135,17 @@ def paint_overlays(p: QPainter, v: View):
         p.drawText(QPointF(mid + 4, 24), "!")
     elif v.state == "alert":
         big = p.font()
-        big.setPointSize(int(18 + 3 * math.sin(v.now * 12)))
-        p.setFont(big)
         p.setPen(QColor(235, 140, 20))
-        p.drawText(QPointF(mid + 2, 26), "!")
-        p.drawText(QPointF(mid + 22, 36), "!")
+        if v.label:
+            big.setPointSize(int(13 + 2 * math.sin(v.now * 12)))
+            p.setFont(big)
+            p.setPen(QColor(214, 69, 69))
+            p.drawText(QPointF(mid - 24, 20), v.label)
+        else:
+            big.setPointSize(int(18 + 3 * math.sin(v.now * 12)))
+            p.setFont(big)
+            p.drawText(QPointF(mid + 2, 26), "!")
+            p.drawText(QPointF(mid + 22, 36), "!")
     if v.hearts:
         p.setPen(QColor(230, 60, 100))
         for i in range(3):

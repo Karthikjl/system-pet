@@ -61,6 +61,7 @@ Linux runtime needs the Qt xcb libraries (Debian/Ubuntu/Kali: `sudo apt install 
 - **System mood:** hot (CPU > 80%), sick (RAM > 90%), hungry (low battery or low fullness), sad (low happiness).
   It speaks up in a bubble when something is wrong.
 - **Reminders:** water, 20-20-20 eye rest, Pomodoro (see below).
+- **Guard dog (opt-in):** barks when a new device appears on your network or a new port starts listening (see below).
 - **Autostart:** optional, from Settings > System (XDG autostart on Linux, Run registry key on Windows).
 - Only one copy runs at a time.
 
@@ -73,6 +74,20 @@ When a reminder fires you get three things, so it is hard to miss:
 Defaults: water every 45 min, eye rest every 20 min, Pomodoro off (25 min work / 5 min break).
 Use the **Preview** buttons in Settings > Reminders to see how each one looks, or set an interval to 1 minute
 to wait for a real one.
+
+## Guard dog (network watch)
+Turn it on in **Settings > Guard**. It is **off by default**.
+
+- Watches for **new devices on your network** (from this computer's ARP table) and **new listening ports** on this
+  computer, and shows the pet barking plus a red card, e.g. *"New listener on port 8765: python3 (reachable from your network)"*.
+- **Passive and private:** it only reads tables your OS already keeps. It never scans the network, sends nothing, and
+  stores known devices only in `known_devices.json` in your data folder.
+- **First check just learns what is normal**, so it does not bark at everything you already have. Use *Forget known
+  devices* to start over, and *Mute for 1 hour* (also in the tray menu) when you do not want interruptions.
+- **Limits:** it only sees devices this computer has already talked to, and without admin rights it may not know which
+  program opened a port. It is a friendly heads-up, not a security product.
+
+![Guard dog alert](docs/toast-guard.png)
 
 ## Customization (Settings window, applies live)
 - Name, size, speed, number of pets (1-5)
@@ -113,6 +128,7 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
   system one on Python 3.13. Build with `PYTHONNOUSERSITE=1 python3 build.py`, or `pip install -U packaging`.
 
 ## Development
+- `pip install -r requirements-dev.txt && python -m pytest` runs the tests (offscreen, CI runs them too).
 - `python main.py --check` prints the platform, folders and skins found (handy for bug reports).
 - `python tools/make_skins.py` regenerates the bundled skins; `python tools/make_icon.py` regenerates the icon.
 - `pip install -r requirements-dev.txt && python tools/make_demo.py` regenerates the GIF and screenshots in `docs/`
@@ -129,6 +145,7 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
 - `system_pet/pet.py`: window, physics, behaviour
 - `system_pet/render/`: drawn cat and sprite-skin renderers
 - `system_pet/paths.py`: per-OS folders; `autostart.py`: per-OS start-on-login
-- `system_pet/config.py`, `needs.py`, `reminders.py`, `stats.py`, `bubble.py`, `toast.py`, `items.py`
+- `system_pet/config.py`, `needs.py`, `reminders.py`, `guard.py`, `stats.py`, `bubble.py`, `toast.py`, `items.py`
 - `system_pet/ui/`: settings window and tray icon
+- `tests/`: pytest suite
 - `skins/`, `assets/`: bundled skins and icon; `packaging/`: PyInstaller spec and Linux installer

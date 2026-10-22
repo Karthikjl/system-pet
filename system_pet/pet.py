@@ -52,6 +52,7 @@ class Pet(QWidget):
         self._kick_until = 0.0
         self._nap_after_landing = 0.0
         self._next_hop = 0.0
+        self.alert_label = ""
 
         self.bounds = QApplication.primaryScreen().availableGeometry()
         # (x, y) is the pet's feet, bottom-center of the widget.
@@ -146,8 +147,9 @@ class Pet(QWidget):
             self.item.deleteLater()
             self.item = None
 
-    def alert(self, text: str | None = None, seconds: float = 6.0):
+    def alert(self, text: str | None = None, seconds: float = 6.0, kind: str = "reminder"):
         """Get the user's attention: hop up and down, wide-eyed, with a bubble."""
+        self.alert_label = "WOOF!" if kind == "guard" else ""
         self._nap_after_landing = 0.0
         self._set_state("alert", seconds)
         self._next_hop = 0.0
@@ -236,6 +238,7 @@ class Pet(QWidget):
             return
         if self.state == "alert":
             if now > self.state_until:
+                self.alert_label = ""
                 self._set_state("idle", 1.0)
             return
 
@@ -397,7 +400,8 @@ class Pet(QWidget):
         k = BASE / self.S
         view = View(state=self.state, mood=self.mood, facing=self.facing, phase=self.phase, now=now,
                     hearts=now < self.hearts_until, cursor=QPointF(cur.x() * k, cur.y() * k),
-                    color=QColor(s.color), accessory=s.accessory)
+                    color=QColor(s.color), accessory=s.accessory,
+                    label=self.alert_label if self.state == "alert" else "")
         p = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing)
         p.scale(self.S / BASE, self.S / BASE)

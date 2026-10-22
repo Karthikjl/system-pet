@@ -12,6 +12,7 @@ KINDS = {
     "eye": ("Rest your eyes", QColor("#32a866")),
     "pomo_break": ("Break time", QColor("#e8743b")),
     "pomo_work": ("Back to focus", QColor("#8a5be8")),
+    "guard": ("Guard dog", QColor("#d64545")),
     "info": ("System Pet", QColor("#e8a23b")),
 }
 W, H, MARGIN = 380, 104, 22
@@ -158,6 +159,12 @@ class Toast(QWidget):
             p.setPen(QPen(self._accent(), 2.6, cap=Qt.PenCapStyle.RoundCap))
             p.drawLine(QPointF(cx, cy), QPointF(cx, cy - 9))
             p.drawLine(QPointF(cx, cy), QPointF(cx + 7, cy + 3))
+        elif self.kind == "guard":                     # shield with "!"
+            p.drawPolygon(QPolygonF([QPointF(cx, cy - 15), QPointF(cx + 12, cy - 10), QPointF(cx + 10, cy + 6),
+                                     QPointF(cx, cy + 15), QPointF(cx - 10, cy + 6), QPointF(cx - 12, cy - 10)]))
+            p.setPen(QPen(self._accent(), 3, cap=Qt.PenCapStyle.RoundCap))
+            p.drawLine(QPointF(cx, cy - 7), QPointF(cx, cy + 2))
+            p.drawPoint(QPointF(cx, cy + 8))
         else:                                          # bell-ish "!"
             f = QFont(self.font())
             f.setBold(True)

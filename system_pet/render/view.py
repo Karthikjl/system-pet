@@ -18,3 +18,4 @@ class View:
     cursor: QPointF = field(default_factory=lambda: QPointF(BASE, BASE / 2))
     color: QColor = field(default_factory=lambda: QColor("#f5be6e"))
     accessory: str = "none"
+    label: str = ""           # text shown above the pet while alerting (default "!")

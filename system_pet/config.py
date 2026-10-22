@@ -28,6 +28,10 @@ class Settings:
     pomo_break: int = 5
     alerts: bool = True
     desktop_notify: bool = True
+    guard_enabled: bool = False      # opt-in
+    guard_ports: bool = True
+    guard_devices: bool = True
+    guard_interval: int = 15
     autostart: bool = False
 
 

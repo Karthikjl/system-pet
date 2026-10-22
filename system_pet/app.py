@@ -4,6 +4,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
 from .config import SettingsStore
+from .guard import Guard
 from .needs import Needs
 from .pet import Pet
 from .render import icon_pixmap
@@ -22,6 +23,8 @@ class Controller(QObject):
 
         self.reminders = Reminders(self.store)
         self.toast = Toast()
+        self.guard = Guard(self.store)
+        self.guard.found.connect(self.on_guard)
         self.reminders.message.connect(self.on_reminder)
 
         self.needs_timer = QTimer(self)
@@ -62,6 +65,18 @@ class Controller(QObject):
         self.toast.show_message(kind, text)
         if self.store.s.desktop_notify:
             self.notify(KINDS.get(kind, KINDS["info"])[0], text)
+
+    def on_guard(self, text: str):
+        """The guard dog found something new: bark, show the card, optionally notify."""
+        for p in self.pets:
+            p.alert(text if p.index == 0 else None, kind="guard")
+        self.toast.show_message("guard", text, 20000)
+        if self.store.s.desktop_notify:
+            self.notify(KINDS["guard"][0], text)
+
+    def mute_guard(self, seconds: float = 3600.0):
+        self.guard.mute(seconds)
+        self.say("Guard dog muted for an hour. Zzz...")
 
     def notify(self, title: str, text: str):
         icon = getattr(getattr(self, "tray", None), "icon", None)
@@ -115,6 +130,7 @@ class Controller(QObject):
         menu.addAction("Take a nap", self.nap)
         menu.addAction("Say something", self.talk)
         menu.addSeparator()
+        menu.addAction("Mute guard dog for 1 hour", lambda: self.mute_guard())
         menu.addAction("Settings...", self.open_settings)
         menu.addAction("Quit", QApplication.quit)
         return menu

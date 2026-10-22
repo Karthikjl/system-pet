@@ -143,7 +143,7 @@ def save_settings_shots(ctrl):
     win = SettingsWindow(ctrl)
     win.show()
     tabs = win.findChild(QTabWidget)
-    for index, name in ((0, "settings-appearance"), (2, "settings-reminders")):
+    for index, name in ((0, "settings-appearance"), (2, "settings-reminders"), (3, "settings-guard")):
         tabs.setCurrentIndex(index)
         QApplication.processEvents()
         win.grab().save(str(DOCS / f"{name}.png"))
@@ -151,11 +151,14 @@ def save_settings_shots(ctrl):
 
 
 def save_toast_shot(ctrl):
-    ctrl.toast.show_message("water", "Time for a sip of water! Staying hydrated keeps you sharp.", 600000)
-    ctrl.toast._stop_animation()
-    ctrl.toast.setWindowOpacity(1.0)
-    ctrl.toast.grab().save(str(DOCS / "toast.png"))
-    ctrl.toast.hide()
+    for kind, text, name in (
+            ("water", "Time for a sip of water! Staying hydrated keeps you sharp.", "toast"),
+            ("guard", "New listener on port 8765: python3 (reachable from your network)", "toast-guard")):
+        ctrl.toast.show_message(kind, text, 600000)
+        ctrl.toast._stop_animation()
+        ctrl.toast.setWindowOpacity(1.0)
+        ctrl.toast.grab().save(str(DOCS / f"{name}.png"))
+        ctrl.toast.hide()
 
 
 def save_skin_grid():

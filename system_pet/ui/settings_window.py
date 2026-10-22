@@ -60,6 +60,7 @@ class SettingsWindow(QDialog):
         tabs.addTab(self._appearance_tab(), "Appearance")
         tabs.addTab(self._behaviour_tab(), "Behaviour")
         tabs.addTab(self._reminders_tab(), "Reminders")
+        tabs.addTab(self._guard_tab(), "Guard")
         tabs.addTab(self._system_tab(), "System")
         tabs.addTab(self._about_tab(), "About")
         lay = QVBoxLayout(self)
@@ -209,6 +210,46 @@ class SettingsWindow(QDialog):
         lay.addStretch(1)
         return w
 
+    def _guard_tab(self):
+        w = QWidget()
+        lay = QVBoxLayout(w)
+        info = QLabel(
+            "<b>Guard dog</b> barks when it sees a <i>new</i> device on your network or a <i>new</i> "
+            "listening port on this computer.<br><br>"
+            "It is <b>passive</b>: it only reads this computer's existing network tables. It never scans "
+            "the network, and nothing leaves your machine.<br><br>"
+            "Limits: it only sees devices this computer has already talked to, and without admin rights it "
+            "may not know which program opened a port. The first check just learns what is normal.")
+        info.setWordWrap(True)
+        info.setTextFormat(Qt.TextFormat.RichText)
+        lay.addWidget(info)
+        lay.addWidget(self._check("Enable the guard dog", "guard_enabled"))
+        lay.addWidget(self._check("Watch listening ports on this computer", "guard_ports"))
+        lay.addWidget(self._check("Watch devices on my network", "guard_devices"))
+        form = QFormLayout()
+        form.addRow("Check every", self._spin("guard_interval", 5, 600, " s"))
+        lay.addLayout(form)
+        self.guard_status = QLabel()
+        lay.addWidget(self.guard_status)
+        row = QHBoxLayout()
+        self.mute_btn = QPushButton()
+        self.mute_btn.clicked.connect(self._toggle_mute)
+        forget = QPushButton("Forget known devices")
+        forget.clicked.connect(lambda: self.ctrl.guard.forget_devices())
+        row.addWidget(self.mute_btn)
+        row.addWidget(forget)
+        lay.addLayout(row)
+        lay.addStretch(1)
+        return w
+
+    def _toggle_mute(self):
+        guard = self.ctrl.guard
+        if guard.is_muted():
+            guard.unmute()
+        else:
+            guard.mute(3600)
+        self._refresh_live()
+
     def _system_tab(self):
         w = QWidget()
         lay = QVBoxLayout(w)
@@ -259,6 +300,11 @@ class SettingsWindow(QDialog):
         st = read_stats()
         bat = f"{st.battery:.0f}%" if st.battery is not None else "n/a"
         self.sys_label.setText(f"CPU {st.cpu:.0f}%   RAM {st.ram:.0f}%   Battery {bat}")
+        guard = self.ctrl.guard
+        self.mute_btn.setText("Unmute" if guard.is_muted() else "Mute for 1 hour")
+        state = "on" if self.store.s.guard_enabled else "off"
+        self.guard_status.setText(f"Guard dog is {state}. Known devices: {guard.known_device_count()}"
+                                  + (" (muted)" if guard.is_muted() else ""))
         n = self.ctrl.needs
         for key, bar in self.bars.items():
             bar.setValue(int(getattr(n, key)))
