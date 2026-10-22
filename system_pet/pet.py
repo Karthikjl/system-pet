@@ -12,6 +12,7 @@ from .items import Item
 from .render import make_renderer
 from .render.view import BASE, View
 from .stats import mood_from, read_stats
+from .windows_geo import floor_y
 
 GRAVITY = 1800.0       # px/s^2
 WALK_SPEED = 90.0
@@ -53,6 +54,7 @@ class Pet(QWidget):
         self._nap_after_landing = 0.0
         self._next_hop = 0.0
         self.alert_label = ""
+        self._edge_turns: bool | None = None
 
         self.bounds = QApplication.primaryScreen().availableGeometry()
         # (x, y) is the pet's feet, bottom-center of the widget.
@@ -156,8 +158,12 @@ class Pet(QWidget):
         if text:
             self.say(text, int(seconds * 1000) + 4000)
 
+    def _floor(self, x: float) -> float:
+        """Where the pet stands at x: a window top (if allowed and supported) or the screen bottom."""
+        return floor_y(x, self.y, self.ctrl.windows.surfaces, self.bounds.bottom())
+
     def nap(self, seconds: float = 15.0):
-        if self.state in ("drag", "fall") or self.y < self.bounds.bottom() - 0.5:
+        if self.state in ("drag", "fall") or self.y < self._floor(self.x) - 0.5:
             self._nap_after_landing = seconds      # can't doze off in mid-air
         else:
             self._set_state("sleep", seconds)
@@ -285,7 +291,7 @@ class Pet(QWidget):
         if self.item is not None:
             self.item.step(dt, self.bounds)
 
-        ground = self.bounds.bottom()
+        ground = self._floor(self.x)
         left, right = self.bounds.left() + self.S / 2, self.bounds.right() - self.S / 2
 
         if self.state == "drag":
@@ -308,6 +314,16 @@ class Pet(QWidget):
             self.vy = -620.0                      # hop!
             self._next_hop = now + 0.75
             on_ground = False
+        if self.state == "walk" and on_ground and ground < self.bounds.bottom():
+            # standing on a window: usually turn around at its edge, sometimes hop off
+            if self._floor(self.x + self.walk_dir * 24) > ground + 6:
+                if self._edge_turns is None:
+                    self._edge_turns = random.random() < 0.75
+                if self._edge_turns:
+                    self.walk_dir = -self.walk_dir
+                    target_vx = self.walk_dir * walk
+            else:
+                self._edge_turns = None
         if on_ground:
             self.vx += (target_vx - self.vx) * min(1.0, dt * 8)
         if abs(self.vx) > 5:

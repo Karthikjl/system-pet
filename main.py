@@ -19,6 +19,8 @@ def check() -> int:
     print("config   :", config_dir())
     print("data     :", data_dir())
     print("skins    :", ", ".join(discover_skins()) or "none")
+    from system_pet.windows_geo import unsupported_reason
+    print("windows  :", unsupported_reason() or "walking on windows is supported")
     return 0
 
 

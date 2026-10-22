@@ -11,6 +11,7 @@ from .. import autostart
 from ..render import discover_skins, make_renderer
 from ..render.view import BASE, View
 from ..stats import read_stats
+from ..windows_geo import unsupported_reason
 
 
 class Preview(QWidget):
@@ -179,6 +180,17 @@ class SettingsWindow(QDialog):
                                           lambda v: f"{v / 10:.1f}x"))
         form.addRow(self._check("Chase the cursor", "chase"))
         form.addRow(self._check("Take naps on its own", "nap"))
+        walk = self._check("Walk on top of windows", "walk_on_windows")
+        reason = unsupported_reason()
+        if reason:
+            walk.setEnabled(False)
+            walk.setToolTip(f"Not available here: {reason}")
+        form.addRow(walk)
+        if reason:
+            note = QLabel(f"Walking on windows is not available: {reason}.")
+            note.setWordWrap(True)
+            note.setStyleSheet("color: gray;")
+            form.addRow(note)
         form.addRow(self._check("Get scared by fast mouse movement", "scare"))
         form.addRow("Number of pets", self._spin("pet_count", 1, 5))
         return w

@@ -55,6 +55,9 @@ Linux runtime needs the Qt xcb libraries (Debian/Ubuntu/Kali: `sudo apt install 
 - **Moves:** falls with gravity, wanders, naps, chases your cursor, gets scared by fast mouse swipes.
   A napping pet stays asleep until the nap ends; only a click, a drag, a fast mouse swipe, a reminder,
   or food/ball wakes it.
+- **Walks on windows:** it stands on top of your windows, turns around at their edges (or hops off), and falls when
+  the window moves or closes. Drag or throw it onto a window to get it up there. Works on **X11 and Windows**; it is
+  switched off on Wayland, where apps cannot see other windows (the Settings page says why).
 - **Interaction:** click to pet, drag to carry, release while moving to throw, double-click to chat.
   Right-click or use the tray to **feed a fish**, **play ball**, nap, or chat.
 - **Needs:** fullness, energy and happiness decay over time and are saved between runs.
@@ -122,7 +125,9 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
 ## Platform notes
 - **Wayland (Linux):** Wayland blocks apps from positioning windows and reading the global cursor, so
   the app forces Qt's `xcb` (XWayland) backend. Cursor tracking may only work while the pointer is over
-  XWayland windows; an X11 session works best.
+  XWayland windows; an X11 session works best. **Walking on windows is unavailable on Wayland.**
+- **Walking on windows** was tested on X11 (Xvfb with a real window) and with unit tests. The Windows window
+  enumeration is untested; please report problems.
 - **Windows:** the Windows build has not been tested by the author yet; please report problems.
 - **Build error `No module named 'distutils'`:** an old `packaging` package in `~/.local` shadows the
   system one on Python 3.13. Build with `PYTHONNOUSERSITE=1 python3 build.py`, or `pip install -U packaging`.
@@ -145,7 +150,7 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
 - `system_pet/pet.py`: window, physics, behaviour
 - `system_pet/render/`: drawn cat and sprite-skin renderers
 - `system_pet/paths.py`: per-OS folders; `autostart.py`: per-OS start-on-login
-- `system_pet/config.py`, `needs.py`, `reminders.py`, `guard.py`, `stats.py`, `bubble.py`, `toast.py`, `items.py`
+- `system_pet/config.py`, `needs.py`, `reminders.py`, `guard.py`, `windows_geo.py`, `stats.py`, `bubble.py`, `toast.py`, `items.py`
 - `system_pet/ui/`: settings window and tray icon
 - `tests/`: pytest suite
 - `skins/`, `assets/`: bundled skins and icon; `packaging/`: PyInstaller spec and Linux installer

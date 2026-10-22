@@ -10,6 +10,7 @@ from .pet import Pet
 from .render import icon_pixmap
 from .reminders import Reminders
 from .toast import KINDS, Toast
+from .windows_geo import WindowWatcher
 
 
 class Controller(QObject):
@@ -23,6 +24,7 @@ class Controller(QObject):
 
         self.reminders = Reminders(self.store)
         self.toast = Toast()
+        self.windows = WindowWatcher(self.store)
         self.guard = Guard(self.store)
         self.guard.found.connect(self.on_guard)
         self.reminders.message.connect(self.on_reminder)

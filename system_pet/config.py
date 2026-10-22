@@ -17,6 +17,7 @@ class Settings:
     accessory: str = "none"      # none | bow | hat | glasses
     chase: bool = True
     nap: bool = True
+    walk_on_windows: bool = True
     scare: bool = True
     pet_count: int = 1
     water_enabled: bool = True
