@@ -1,0 +1,28 @@
+{
+  "name": "Blue Cat",
+  "fps": 8,
+  "frames": {
+    "idle": [
+      "idle_0.png",
+      "idle_1.png"
+    ],
+    "walk": [
+      "walk_0.png",
+      "walk_1.png",
+      "walk_2.png",
+      "walk_3.png"
+    ],
+    "sleep": [
+      "sleep_0.png"
+    ],
+    "scared": [
+      "scared_0.png"
+    ],
+    "drag": [
+      "drag_0.png"
+    ],
+    "fall": [
+      "fall_0.png"
+    ]
+  }
+}

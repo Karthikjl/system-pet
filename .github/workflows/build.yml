@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pyinstaller
+      - name: Linux Qt runtime libraries
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0
+      - run: python build.py
+      - name: Smoke test
+        run: python main.py --check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SystemPet-${{ runner.os }}
+          path: dist/SystemPet*
