@@ -3,6 +3,17 @@
 A customizable desktop pet for **Windows and Linux** (Python + PyQt6). It lives on top of your screen,
 reacts to your mouse, and reacts to your system.
 
+![System Pet demo: the pet walks, hops when a water reminder pops up, then naps](docs/demo.gif)
+
+## Screenshots
+| Settings | Reminders | Reminder card |
+|---|---|---|
+| ![Appearance settings](docs/settings-appearance.png) | ![Reminder settings](docs/settings-reminders.png) | ![Water reminder card](docs/toast.png) |
+
+Looks you can pick (drawn cat colours and accessories, plus sprite skins):
+
+![Skins](docs/skins.png)
+
 ## Download
 Get the latest build from the **[Releases page](https://github.com/Karthikjl/system-pet/releases)**, no Python needed:
 
@@ -104,6 +115,8 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
 ## Development
 - `python main.py --check` prints the platform, folders and skins found (handy for bug reports).
 - `python tools/make_skins.py` regenerates the bundled skins; `python tools/make_icon.py` regenerates the icon.
+- `pip install -r requirements-dev.txt && python tools/make_demo.py` regenerates the GIF and screenshots in `docs/`
+  from the real widgets (offscreen, no screen recorder).
 - Offscreen runs for testing: `QT_QPA_PLATFORM=offscreen python main.py` with `SYSTEM_PET_CONFIG_DIR` and
   `SYSTEM_PET_DATA_DIR` pointing at a scratch folder so your real settings are untouched.
 
