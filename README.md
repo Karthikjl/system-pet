@@ -97,6 +97,9 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
 - Offscreen runs for testing: `QT_QPA_PLATFORM=offscreen python main.py` with `SYSTEM_PET_CONFIG_DIR` and
   `SYSTEM_PET_DATA_DIR` pointing at a scratch folder so your real settings are untouched.
 
+## License
+[MIT](LICENSE). Contributions, skins and bug reports are welcome.
+
 ## Layout
 - `main.py`: entry point (`--check` for diagnostics); `build.py`: build the app
 - `system_pet/app.py`: controller (pets, tray, menus, settings window)
