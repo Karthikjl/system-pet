@@ -3,6 +3,16 @@
 A customizable desktop pet for **Windows and Linux** (Python + PyQt6). It lives on top of your screen,
 reacts to your mouse, and reacts to your system.
 
+## Download
+Get the latest build from the **[Releases page](https://github.com/Karthikjl/system-pet/releases)**, no Python needed:
+
+| OS | File | How to run |
+|---|---|---|
+| Windows | `SystemPet-windows-x64.exe` | Double-click. The app is unsigned, so SmartScreen may warn: *More info* > *Run anyway*. |
+| Linux | `SystemPet-linux-x86_64.tar.gz` | `tar -xzf SystemPet-linux-x86_64.tar.gz && ./SystemPet` |
+
+Releases are built automatically by GitHub Actions when a version tag (`v*`) is pushed.
+
 ## Install / run
 
 ### From source (any OS)
