@@ -1,0 +1,33 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you see instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Release tag (for example v0.1.0) or commit
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Windows 10/11, Linux (X11), Linux (Wayland), Other]
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Output of `python main.py --check`
+      description: For the downloaded app, run `./SystemPet --check` (Linux).
+      render: text
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce

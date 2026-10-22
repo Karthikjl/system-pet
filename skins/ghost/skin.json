@@ -1,5 +1,7 @@
 {
   "name": "Ghost",
+  "author": "System Pet",
+  "license": "MIT",
   "fps": 6,
   "frames": {
     "idle": [

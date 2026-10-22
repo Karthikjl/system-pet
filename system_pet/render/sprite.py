@@ -8,6 +8,8 @@ from PyQt6.QtGui import QPainter, QPixmap
 from .drawn import paint_overlays
 from .view import BASE, View
 
+KNOWN_STATES = {"idle", "walk", "chase", "fetch", "eat", "sleep", "scared", "drag", "fall", "alert"}
+
 # A skin only has to provide "idle"; other states fall back along this table.
 FALLBACK = {"chase": "walk", "fetch": "walk", "eat": "idle", "scared": "idle",
             "drag": "idle", "fall": "idle", "sleep": "idle", "alert": "idle"}

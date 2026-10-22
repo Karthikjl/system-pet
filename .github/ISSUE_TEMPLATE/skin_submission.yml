@@ -1,0 +1,13 @@
+name: Skin idea or submission
+description: Share a skin or ask for one
+labels: [skin]
+body:
+  - type: markdown
+    attributes:
+      value: To submit a finished skin, open a pull request (see CONTRIBUTING.md). Use this form for ideas or help.
+  - type: textarea
+    id: idea
+    attributes:
+      label: Describe the skin
+    validations:
+      required: true

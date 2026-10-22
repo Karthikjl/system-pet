@@ -1,5 +1,7 @@
 {
   "name": "Blue Cat",
+  "author": "System Pet",
+  "license": "MIT",
   "fps": 8,
   "frames": {
     "idle": [

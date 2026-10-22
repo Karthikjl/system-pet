@@ -74,7 +74,8 @@ def write_skin(name, title, fps, states):
             img.save(str(folder / fn))
             files.append(fn)
         frames[state] = files
-    (folder / "skin.json").write_text(json.dumps({"name": title, "fps": fps, "frames": frames}, indent=2))
+    (folder / "skin.json").write_text(json.dumps(
+        {"name": title, "author": "System Pet", "license": "MIT", "fps": fps, "frames": frames}, indent=2))
 
 
 def blue_cat(p, state, t):

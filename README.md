@@ -104,6 +104,16 @@ Turn it on in **Settings > Guard**. It is **off by default**.
 | Pet needs | `~/.local/share/system-pet/state.json` | `%LOCALAPPDATA%\SystemPet\state.json` |
 | Your skins | `~/.config/system-pet/skins/<name>/` | `%APPDATA%\SystemPet\skins\<name>\` |
 
+## Skin gallery
+<!-- skins:start -->
+| Preview | Skin | Author | License |
+|---|---|---|---|
+| <img src="skins/blue-cat/idle_0.png" width="64"> | Blue Cat (`blue-cat`) | System Pet | MIT |
+| <img src="skins/ghost/idle_0.png" width="64"> | Ghost (`ghost`) | System Pet | MIT |
+<!-- skins:end -->
+
+Want to add yours? See [CONTRIBUTING.md](CONTRIBUTING.md) and `docs/skin-template/`.
+
 ## Making a skin
 Create a folder `<name>` in your skins location (or `skins/<name>/` in this project) with:
 ```json
@@ -120,7 +130,8 @@ Create a folder `<name>` in your skins location (or `skins/<name>/` in this proj
 Frames are square PNGs (240x240 recommended) of the pet **facing right**, feet at the bottom edge.
 Only `idle` is required. Other states: `walk`, `sleep`, `scared`, `drag`, `fall`; anything missing
 falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins** in Settings.
-`tools/make_skins.py` generates the two bundled skins and is a good template.
+`tools/make_skins.py` generates the two bundled skins and is a good template. Check a skin with
+`python tools/validate_skin.py <folder>`; `docs/skin-template/` has a starter `skin.json` and a drawing guide.
 
 ## Platform notes
 - **Wayland (Linux):** Wayland blocks apps from positioning windows and reading the global cursor, so
@@ -141,8 +152,11 @@ falls back (walk for chase/fetch, idle for the rest). Then click **Reload skins*
 - Offscreen runs for testing: `QT_QPA_PLATFORM=offscreen python main.py` with `SYSTEM_PET_CONFIG_DIR` and
   `SYSTEM_PET_DATA_DIR` pointing at a scratch folder so your real settings are untouched.
 
+## Contributing
+Skins, bug reports and code are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
-[MIT](LICENSE). Contributions, skins and bug reports are welcome.
+[MIT](LICENSE).
 
 ## Layout
 - `main.py`: entry point (`--check` for diagnostics); `build.py`: build the app
